@@ -1,9 +1,9 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_diplom/firebase_options.dart';
-import 'package:firebase_diplom/screens/auth_screens.dart';
-import 'package:firebase_diplom/screens/employyes_screen.dart';
-import 'package:firebase_diplom/screens/main_screen.dart';
+import 'package:firebase_diplom/auth/view/auth_screens.dart';
+import 'package:firebase_diplom/employyes/view/employyes_screen.dart';
+import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';

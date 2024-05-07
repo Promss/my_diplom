@@ -1,6 +1,6 @@
-import 'package:firebase_diplom/screens/add_screens.dart';
-import 'package:firebase_diplom/screens/homePage_screens.dart';
-import 'package:firebase_diplom/screens/profile_screen.dart';
+import 'package:firebase_diplom/adds/view/add_screens.dart';
+import 'package:firebase_diplom/home/view/home_screens.dart';
+import 'package:firebase_diplom/profile/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 
 class SubMenuList {

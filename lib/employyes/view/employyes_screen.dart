@@ -1,4 +1,4 @@
-import 'package:firebase_diplom/screens/main_screen.dart';
+import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 
 class Employee {
