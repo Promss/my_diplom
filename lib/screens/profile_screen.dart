@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_diplom/services/auth_service.dart';
 
 import 'package:flutter/material.dart';
@@ -13,10 +14,12 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
+    final auth = AuthService();
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () {
+          onPressed: () async {
+            await auth.signout(context);
           },
           child: Text('Выход'),
         ),

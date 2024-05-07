@@ -1,4 +1,9 @@
+import 'dart:developer';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_diplom/screens/auth_screens.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AuthService {
   static final FirebaseAuth auth = FirebaseAuth.instance;
@@ -11,14 +16,16 @@ class AuthService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       print(e.code);
-      if (e.code == 'credential-already-in-use') {
-        // Handle scenario where user might already be signed in
-        // (consider refreshing credential or signing out first)
-      }
+      // Handle specific errors (optional)
       return null; // Handle other errors
     } catch (e) {
       print(e);
       return null; // Handle other errors
     }
+  }
+
+  Future<void> signout(BuildContext context) async {
+    await auth.signOut();
+    context.go('/');
   }
 }
