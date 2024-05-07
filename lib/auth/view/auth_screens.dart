@@ -22,7 +22,6 @@ class _AuthScreenState extends State<AuthScreen> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  String? _errorMessage;
   Color _emailBorderColor =
       Color.fromRGBO(103, 80, 165, 1.0); // Initial border color for email field
   Color _passwordBorderColor = Color.fromRGBO(103, 80, 165, 1.0);
@@ -37,7 +36,6 @@ class _AuthScreenState extends State<AuthScreen> {
         context.go('/mainScreen'); // Assuming proper route configuration
       } else {
         setState(() {
-          _errorMessage = "Неверный логин или пароль";
           _emailBorderColor = Colors.red;
           _passwordBorderColor = Colors.red;
           ScaffoldMessenger.of(context).showSnackBar(
