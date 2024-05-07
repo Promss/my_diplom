@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_diplom/firebase_options.dart';
 import 'package:firebase_diplom/screens/auth_screens.dart';
@@ -12,7 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -27,10 +28,42 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      title: 'Flutter Demo',
-      theme: _buildTheme(Brightness.light),
-      routerConfig: _router,
+    return StreamBuilder<User?>(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        final user = snapshot.data;
+        if (user != null) {
+          // User is logged in, show MainScreen
+          return MaterialApp.router(
+            title: 'Flutter Demo',
+            theme: _buildTheme(Brightness.light),
+            routerConfig: GoRouter(initialLocation: '/mainScreen', routes: [
+              GoRoute(
+                name: 'MainScreen',
+                path: '/mainScreen',
+                builder: (BuildContext context, GoRouterState state) {
+                  return const MainScreen();
+                },
+                routes: <RouteBase>[
+                  GoRoute(
+                    name: 'Employees',
+                    path: 'employees',
+                    builder: (BuildContext context, GoRouterState state) {
+                      return const EmployeesScreen();
+                    },
+                  ),
+                ],
+              ),
+            ]),
+          );
+        } else {
+          // User is not logged in, show AuthScreens
+          return MaterialApp.router(
+              title: 'Flutter Demo',
+              theme: _buildTheme(Brightness.light),
+              routerConfig: _router);
+        }
+      },
     );
   }
 }
