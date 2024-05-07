@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   ThemeData _buildTheme(brightness) {
     var baseTheme = ThemeData(brightness: brightness);
-
     return baseTheme.copyWith(
       textTheme: GoogleFonts.golosTextTextTheme(baseTheme.textTheme),
     );
@@ -32,12 +31,18 @@ class MyApp extends StatelessWidget {
       stream: FirebaseAuth.instance.authStateChanges(),
       builder: (context, snapshot) {
         final user = snapshot.data;
-        if (user != null) {
-          // User is logged in, show MainScreen
-          return MaterialApp.router(
-            title: 'Flutter Demo',
-            theme: _buildTheme(Brightness.light),
-            routerConfig: GoRouter(initialLocation: '/mainScreen', routes: [
+        return MaterialApp.router(
+          title: 'Flutter Demo',
+          theme: _buildTheme(Brightness.light),
+          routerConfig: GoRouter(
+            // Set initial location based on user state
+            initialLocation: user != null ? '/mainScreen' : '/',
+            routes: [
+              GoRoute(
+                name: 'auth',
+                path: '/',
+                builder: ((context, state) => AuthScreen()),
+              ),
               GoRoute(
                 name: 'MainScreen',
                 path: '/mainScreen',
@@ -54,15 +59,9 @@ class MyApp extends StatelessWidget {
                   ),
                 ],
               ),
-            ]),
-          );
-        } else {
-          // User is not logged in, show AuthScreens
-          return MaterialApp.router(
-              title: 'Flutter Demo',
-              theme: _buildTheme(Brightness.light),
-              routerConfig: _router);
-        }
+            ],
+          ),
+        );
       },
     );
   }
