@@ -33,7 +33,7 @@ class _AuthScreenState extends State<AuthScreen> {
       if (userCredential != null) {
         _emailBorderColor = Color.fromRGBO(103, 80, 165, 1.0);
         _passwordBorderColor = Color.fromRGBO(103, 80, 165, 1.0);
-        context.go('/mainScreen'); // Assuming proper route configuration
+        navigateToMainScreen(context); // Separate navigation function
       } else {
         setState(() {
           _emailBorderColor = Colors.red;
@@ -47,6 +47,10 @@ class _AuthScreenState extends State<AuthScreen> {
         });
       }
     }
+  }
+
+  void navigateToMainScreen(BuildContext context) {
+    context.go('/mainScreen');
   }
 
   @override

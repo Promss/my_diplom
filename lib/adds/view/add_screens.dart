@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class AdditionItems {
   final String label;
@@ -67,6 +68,9 @@ class _AddPageState extends State<AddPage> {
                   ),
                 ),
                 onTap: () {
+                  if (element.label == 'Сотрудник') {
+                    context.go('/addScreens/employee');
+                  } else {}
                   // ignore: avoid_print
                   print(element.label);
                 },
