@@ -4,20 +4,6 @@ import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-class Employee {
-  final String name;
-  final String surname;
-  final String patronymic;
-  final String phoneNumber;
-  final String employeePosition;
-
-  Employee(
-      {required this.name,
-      required this.surname,
-      required this.patronymic,
-      required this.phoneNumber,
-      required this.employeePosition});
-}
 
 class EmployeesScreen extends StatefulWidget {
   const EmployeesScreen({super.key});
