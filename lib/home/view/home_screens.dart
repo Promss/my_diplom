@@ -86,7 +86,9 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   if (element.label == 'Сотрудники') {
                     context.go('/mainScreen/employees');
-                  } else {}
+                  } else if (element.label == 'Направления') {
+                    context.go('/mainScreen/direction');
+                  }
                 },
               )
           ],

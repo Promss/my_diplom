@@ -70,7 +70,9 @@ class _AddPageState extends State<AddPage> {
                 onTap: () {
                   if (element.label == 'Сотрудник') {
                     context.go('/addScreens/employee');
-                  } else {}
+                  } else if (element.label == 'Направление') {
+                    context.go('/addScreens/direction');
+                  }
                   // ignore: avoid_print
                   print(element.label);
                 },
