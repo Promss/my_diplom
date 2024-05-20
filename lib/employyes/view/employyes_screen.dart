@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_diplom/services/database.dart';
 import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class Employee {
   final String name;
@@ -166,6 +167,7 @@ class _EmployeesScreenState extends State<EmployeesScreen> {
           onPressed: () {
             // ignore: avoid_print
             print('Добавление');
+            context.go('/addScreens/employee');
           },
           child: Icon(
             Icons.add,
