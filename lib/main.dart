@@ -1,11 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_diplom/adds/view/add_direction.dart';
-import 'package:firebase_diplom/adds/view/add_employye.dart';
-import 'package:firebase_diplom/direction/view/direction_screen.dart';
+import 'package:firebase_diplom/direction/controller/add_direction_controller.dart';
+import 'package:firebase_diplom/direction/controller/direction_controller.dart';
+import 'package:firebase_diplom/employyes/controller/add_employee_controller.dart';
+import 'package:firebase_diplom/employyes/controller/employee_controller.dart';
 import 'package:firebase_diplom/firebase_options.dart';
 import 'package:firebase_diplom/auth/view/auth_screens.dart';
-import 'package:firebase_diplom/employyes/view/employyes_screen.dart';
 import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -48,21 +48,21 @@ class MyApp extends StatelessWidget {
                 name: 'MainScreen',
                 path: '/mainScreen',
                 builder: (BuildContext context, GoRouterState state) {
-                  return const MainScreen();
+                  return MainScreen();
                 },
                 routes: <RouteBase>[
                   GoRoute(
                     name: 'Employees',
                     path: 'employees',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const EmployeesScreen();
+                      return EmployeesController();
                     },
                   ),
                   GoRoute(
                     name: 'Direction',
                     path: 'direction',
                     builder: (BuildContext context, GoRouterState state) {
-                      return const DirectionScreen();
+                      return  DirectionController();
                     },
                   ),
                 ],
@@ -71,14 +71,14 @@ class MyApp extends StatelessWidget {
                 path: '/addScreens/employee',
                 name: 'AddEmployee',
                 builder: (BuildContext context, GoRouterState state) {
-                  return AddEmployee();
+                  return AddEmployeeController();
                 },
               ),
               GoRoute(
                 path: '/addScreens/direction',
                 name: 'AddDirection',
                 builder: (BuildContext context, GoRouterState state) {
-                  return AddDirection();
+                  return AddDirectionController();
                 },
               )
             ],
