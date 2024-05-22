@@ -1,5 +1,5 @@
 import 'package:firebase_diplom/adds/view/add_screens.dart';
-import 'package:firebase_diplom/home/view/home_screens.dart';
+import 'package:firebase_diplom/home/view/home_view.dart';
 import 'package:firebase_diplom/profile/view/profile_screen.dart';
 import 'package:flutter/material.dart';
 

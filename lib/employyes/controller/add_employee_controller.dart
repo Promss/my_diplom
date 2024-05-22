@@ -1,7 +1,7 @@
 // add_employee_controller.dart
 
 import 'package:firebase_diplom/employyes/database/database_employee.dart';
-import 'package:firebase_diplom/employyes/view/add_employee.dart';
+import 'package:firebase_diplom/employyes/view/add_employee_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:go_router/go_router.dart';
