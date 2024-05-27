@@ -26,7 +26,7 @@ class AddEmployeeController extends StatelessWidget {
             textColor: Colors.white,
             fontSize: 16.0,
           );
-          context.go('/mainScreen/employees');
+          Navigator.pop(context);
         });
       },
     );

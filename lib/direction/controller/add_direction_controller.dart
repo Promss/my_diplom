@@ -24,7 +24,7 @@ class AddDirectionController extends StatelessWidget {
           textColor: Colors.white,
           fontSize: 16.0,
         );
-        context.go('/mainScreen/direction');
+        Navigator.pop(context);
       });
     });
   }

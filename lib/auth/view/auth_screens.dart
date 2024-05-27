@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_diplom/services/auth_service.dart';
+import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -50,7 +51,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void navigateToMainScreen(BuildContext context) {
-    context.go('/mainScreen');
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen()));
   }
 
   @override

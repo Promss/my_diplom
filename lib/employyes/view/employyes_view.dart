@@ -1,5 +1,6 @@
 // employees_view.dart
 
+import 'package:firebase_diplom/employyes/controller/add_employee_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:go_router/go_router.dart';
@@ -27,7 +28,8 @@ class _EmployeesViewState extends State<EmployeesView> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromRGBO(103, 80, 165, 1),
         onPressed: () {
-          context.go('/addScreens/employee');
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => AddEmployeeController()));
         },
         child: Icon(
           Icons.add,
@@ -59,6 +61,13 @@ class _EmployeesViewState extends State<EmployeesView> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(
+              child: Text(
+            'Нет данных',
+            style: TextStyle(fontSize: 25, color: Colors.grey),
+          ));
         }
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,

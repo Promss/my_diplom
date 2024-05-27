@@ -25,7 +25,7 @@ class _AddDirectionViewState extends State<AddDirectionView> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            context.go('/mainScreen');
+            Navigator.pop(context);
           },
         ),
       ),

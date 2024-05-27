@@ -1,3 +1,6 @@
+import 'package:firebase_diplom/direction/controller/add_direction_controller.dart';
+import 'package:firebase_diplom/employyes/controller/add_employee_controller.dart';
+import 'package:firebase_diplom/teacher/controller/add_teacher_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -69,9 +72,20 @@ class _AddPageState extends State<AddPage> {
                 ),
                 onTap: () {
                   if (element.label == 'Сотрудник') {
-                    context.go('/addScreens/employee');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddEmployeeController()));
                   } else if (element.label == 'Направление') {
-                    context.go('/addScreens/direction');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddDirectionController()));
+                  } else if (element.label == 'Преподаватель') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => AddTeacherController()));
                   }
                   // ignore: avoid_print
                   print(element.label);

@@ -32,7 +32,7 @@ class _AddEmployeeViewState extends State<AddEmployeeView> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios),
           onPressed: () {
-            context.go('/mainScreen');
+            Navigator.pop(context);
           },
         ),
       ),

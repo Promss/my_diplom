@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_diplom/direction/controller/add_direction_controller.dart';
 import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -29,7 +30,10 @@ class _DirectioViewState extends State<DirectioView> {
           onPressed: () {
             // ignore: avoid_print
             print('Добавление');
-            context.go('/addScreens/direction');
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => AddDirectionController()));
           },
           child: Icon(
             Icons.add,
@@ -44,9 +48,6 @@ class _DirectioViewState extends State<DirectioView> {
               // ignore: avoid_print
               Navigator.pop(
                 context,
-                MaterialPageRoute(
-                  builder: (context) => const MainScreen(),
-                ),
               );
             },
           ),
@@ -68,6 +69,13 @@ class _DirectioViewState extends State<DirectioView> {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Center(child: CircularProgressIndicator());
+        }
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Center(
+              child: Text(
+            'Нет данных',
+            style: TextStyle(fontSize: 25, color: Colors.grey),
+          ));
         }
         return ListView.builder(
           itemCount: snapshot.data!.docs.length,

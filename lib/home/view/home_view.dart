@@ -1,3 +1,7 @@
+import 'package:firebase_diplom/direction/controller/direction_controller.dart';
+import 'package:firebase_diplom/employyes/controller/employee_controller.dart';
+import 'package:firebase_diplom/teacher/controller/teacher_controller.dart';
+import 'package:firebase_diplom/teacher/model/teacher_model.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -85,9 +89,20 @@ class _HomePageState extends State<HomePage> {
                 ),
                 onTap: () {
                   if (element.label == 'Сотрудники') {
-                    context.go('/mainScreen/employees');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EmployeesController()));
                   } else if (element.label == 'Направления') {
-                    context.go('/mainScreen/direction');
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => DirectionController()));
+                  } else if (element.label == 'Преподаватели') {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TeacherController()));
                   }
                 },
               )
