@@ -36,11 +36,11 @@ class _DirectionControllerState extends State<DirectionController> {
         try {
           await databaseMethodsDirection.deleteDirectionDetail(id);
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Direction $id deleted successfully')),
+            SnackBar(content: Text('Направление удаленно')),
           );
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to delete direction: $e')),
+            SnackBar(content: Text('Ошибка при удалении: $e')),
           );
         }
       },
@@ -85,7 +85,7 @@ class _DirectionControllerState extends State<DirectionController> {
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
-                    content: Text('Direction updated successfuly'),
+                    content: Text('Направление обновлено'),
                   ),
                 );
               },
