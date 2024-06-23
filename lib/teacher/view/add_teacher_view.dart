@@ -29,7 +29,7 @@ class _AddTeacherViewState extends State<AddTeacherView> {
     double screenHeight = queryData.size.height;
 
     return Scaffold(
-      resizeToAvoidBottomInset: false,
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         title: Text('Добавление преподавателя'),
         leading: IconButton(

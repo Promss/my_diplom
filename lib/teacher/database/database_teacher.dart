@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class DatabaseMethodsTeacher {
-  Stream<QuerySnapshot> getEmployeeDetails() {
+  Stream<QuerySnapshot> getTeacherDetails() {
     return FirebaseFirestore.instance.collection("Teacher").snapshots();
   }
 
@@ -11,7 +11,7 @@ class DatabaseMethodsTeacher {
     return snapshot.exists;
   }
 
-  Future<void> addEmployeeDetails(
+  Future<void> addTeacherDetails(
       Map<String, dynamic> employeeInfoMap, String id) async {
     await FirebaseFirestore.instance
         .collection('Teacher')

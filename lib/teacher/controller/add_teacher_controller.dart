@@ -2,7 +2,6 @@ import 'package:firebase_diplom/teacher/database/database_teacher.dart';
 import 'package:firebase_diplom/teacher/view/add_teacher_view.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:go_router/go_router.dart';
 
 class AddTeacherController extends StatelessWidget {
   const AddTeacherController({super.key});
@@ -13,7 +12,7 @@ class AddTeacherController extends StatelessWidget {
       onAddTeacher: (id, employeeInfoMap) async {
         DatabaseMethodsTeacher databaseMethods = DatabaseMethodsTeacher();
         await databaseMethods
-            .addEmployeeDetails(employeeInfoMap, id)
+            .addTeacherDetails(employeeInfoMap, id)
             .then((value) {
           Fluttertoast.showToast(
             msg: "Добавлено",
