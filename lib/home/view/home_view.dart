@@ -1,5 +1,6 @@
 import 'package:firebase_diplom/direction/controller/direction_controller.dart';
 import 'package:firebase_diplom/employyes/controller/employee_controller.dart';
+import 'package:firebase_diplom/group/controller/group_controller.dart';
 import 'package:firebase_diplom/teacher/controller/teacher_controller.dart';
 import 'package:firebase_diplom/teacher/model/teacher_model.dart';
 import 'package:flutter/material.dart';
@@ -103,6 +104,11 @@ class _HomePageState extends State<HomePage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) => TeacherController()));
+                  }else if (element.label == 'Группы'){
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => GroupController()));
                   }
                 },
               )
