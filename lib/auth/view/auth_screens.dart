@@ -15,7 +15,6 @@ class _AuthScreenState extends State<AuthScreen> {
   @override
   void initState() {
     super.initState();
-    // Добавьте эту строку в initState()
     FirebaseAuth.instance.setSettings(appVerificationDisabledForTesting: true);
   }
 
@@ -51,7 +50,7 @@ class _AuthScreenState extends State<AuthScreen> {
   }
 
   void navigateToMainScreen(BuildContext context) {
-    Navigator.push(context, MaterialPageRoute(builder: (context)=> MainScreen()));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MainScreen()));
   }
 
   @override

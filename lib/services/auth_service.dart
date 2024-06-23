@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
 class AuthService {
   static final FirebaseAuth auth = FirebaseAuth.instance;
@@ -13,16 +12,16 @@ class AuthService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       print(e.code);
-      // Handle specific errors (optional)
-      return null; // Handle other errors
+      // Обработка конкретных ошибок (опционально)
+      return null; // Обработка других ошибок
     } catch (e) {
       print(e);
-      return null; // Handle other errors
+      return null; // Обработка других ошибок
     }
   }
 
   Future<void> signout(BuildContext context) async {
     await auth.signOut();
-    context.go('/');
+    Navigator.pushReplacementNamed(context, '/auth');
   }
 }

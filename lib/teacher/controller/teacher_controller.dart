@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_diplom/teacher/database/database_teacher.dart';
 import 'package:firebase_diplom/teacher/view/teacher_view.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 
 class TeacherController extends StatefulWidget {
   const TeacherController({super.key});
@@ -31,7 +30,7 @@ class _TeacherControllerState extends State<TeacherController> {
   }
 
   Future<void> _loadTeacherStream() async {
-    teacherStream = databaseMethodsTeacher.getEmployeeDetails();
+    teacherStream = databaseMethodsTeacher.getTeacherDetails();
     setState(() {});
   }
 
@@ -71,27 +70,27 @@ class _TeacherControllerState extends State<TeacherController> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: Text('Редактирование'),
+          title: const Text('Редактирование'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTextField('Фамилия', surnameController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Имя', nameController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Отчество', patronymicController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Почта', emailController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Номер телефона', phoneNumberController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Адрес', addressController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildTextField('Номер патента', numberPatentController),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 _buildDirectionDropdown(),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
               ],
             ),
           ),
@@ -100,7 +99,7 @@ class _TeacherControllerState extends State<TeacherController> {
               onPressed: () {
                 Navigator.pop(context);
               },
-              child: Text('Отмена'),
+              child: const Text('Отмена'),
             ),
             TextButton(
               onPressed: () async {
@@ -118,10 +117,10 @@ class _TeacherControllerState extends State<TeacherController> {
                     id, updateInfo);
                 Navigator.pop(context);
                 ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Employee updated successfully!')),
+                  const SnackBar(content: Text('Employee updated successfully!')),
                 );
               },
-              child: Text('Сохранить'),
+              child: const Text('Сохранить'),
             ),
           ],
         );
@@ -136,7 +135,7 @@ class _TeacherControllerState extends State<TeacherController> {
         Text(label),
         TextField(
           controller: controller,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 1, horizontal: 10),
             border: OutlineInputBorder(),
           ),
@@ -150,17 +149,17 @@ class _TeacherControllerState extends State<TeacherController> {
       stream: FirebaseFirestore.instance.collection('Direction').snapshots(),
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
-          return CircularProgressIndicator();
+          return const CircularProgressIndicator();
         }
 
         var directions = snapshot.data!.docs;
 
         return DropdownButtonFormField<String>(
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
             contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
             border: OutlineInputBorder(),
           ),
-          hint: Text('Выберите направление'),
+          hint: const Text('Выберите направление'),
           value: selectedDirection,
           onChanged: (String? newValue) {
             setState(() {
