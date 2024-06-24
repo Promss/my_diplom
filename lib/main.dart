@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_diplom/firebase_options.dart';
 import 'package:firebase_diplom/auth/view/auth_screens.dart';
+import 'package:firebase_diplom/services/auth_service.dart';
 import 'package:firebase_diplom/widgets/nav_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -36,7 +37,20 @@ class MyApp extends StatelessWidget {
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, snapshot) {
             final user = snapshot.data;
-            return user != null ? MainScreen() : AuthScreen();
+            if (user != null) {
+              return FutureBuilder(
+                future: AuthService().createUserDocumentIfNotExists(user),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    return MainScreen();
+                  } else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              );
+            } else {
+              return AuthScreen();
+            }
           },
         ),
         '/auth': (context) => AuthScreen(),
