@@ -38,4 +38,22 @@ class DatabaseMethodsGroup {
       print("Группа с ID $id не найдена!");
     }
   }
+
+  Future<void> addExistingStudentToGroup(String groupId, String studentId) async {
+    DocumentSnapshot studentSnapshot = await FirebaseFirestore.instance.collection('Student').doc(studentId).get();
+    await FirebaseFirestore.instance
+        .collection('Group')
+        .doc(groupId)
+        .collection('Students')
+        .doc(studentId)
+        .set(studentSnapshot.data() as Map<String, dynamic>);
+  }
+
+  Stream<QuerySnapshot> getStudentsInGroup(String groupId) {
+    return FirebaseFirestore.instance
+        .collection('Group')
+        .doc(groupId)
+        .collection('Students')
+        .snapshots();
+  }
 }

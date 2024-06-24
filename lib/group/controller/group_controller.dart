@@ -1,9 +1,10 @@
+import 'package:firebase_diplom/group/controller/add_group_controller.dart';
 import 'package:firebase_diplom/group/database/database.dart';
-import 'package:firebase_diplom/group/model/model.dart';
-import 'package:firebase_diplom/group/view/group_view.dart';
+import 'package:firebase_diplom/group/view/add_group_view.dart';
+import 'package:firebase_diplom/group/view/student_list_in_group.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';// Импортируйте ваш файл model.dart
+import 'package:intl/intl.dart';
 
 class GroupController extends StatefulWidget {
   const GroupController({super.key});
@@ -37,38 +38,102 @@ class _GroupControllerState extends State<GroupController> {
 
   @override
   Widget build(BuildContext context) {
-    return GroupView(
-        groupStream: groupStream,
-        onDeleteGroup: (id) async {
-          try {
-            await databaseMethodsGroup.deleteGroupDetail(id);
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Группа удалена успешно'),
-              ),
-            );
-          } catch (e) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text('Удаление группы не успешна: $e'),
-              ),
-            );
-          }
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Группы'),
+        centerTitle: false,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddGroupController(),
+            ),
+          );
         },
-        onEditGroup: (DocumentSnapshot ds) {
-          selectedDirectionController = ds['GroupDirection'];
-          nameGroupController.text = ds['GroupName'];
-          selectedCityController = ds['GroupCity'];
-          startDateController.text = DateFormat('dd-MM-yyyy').format((ds['StartDate'] as Timestamp).toDate());
-          endDateController.text = DateFormat('dd-MM-yyyy').format((ds['EndDate'] as Timestamp).toDate());
-          selectedTeacherController = ds['GroupTeacher'];
-          maxCountStudentController.text = ds['MaxCountStudent'].toString();
-          priceMonthController.text = ds['PriceMonth'].toString();
-          _showEditDialog(ds.id);
-        });
+        child: Icon(Icons.add),
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: groupStream,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('Нет данных'));
+          }
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              DocumentSnapshot ds = snapshot.data!.docs[index];
+              return _buildGroupTile(ds);
+            },
+          );
+        },
+      ),
+    );
   }
 
-  void _showEditDialog(String id) {
+  Widget _buildGroupTile(DocumentSnapshot ds) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+      elevation: 2.0,
+      child: ListTile(
+        title: Text('Название: ${ds['GroupName']}'),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Направление: ${ds['GroupDirection']}'),
+            Text('Город: ${ds['GroupCity']}'),
+            Text(
+                'Дата с: ${DateFormat('dd-MM-yyyy').format((ds['StartDate'] as Timestamp).toDate())}'),
+            Text(
+                'Дата до: ${DateFormat('dd-MM-yyyy').format((ds['EndDate'] as Timestamp).toDate())}'),
+            Text('Учитель: ${ds['GroupTeacher']}'),
+            Text('Макс. кол-во студентов: ${ds['MaxCountStudent']}'),
+            Text('Цена в месяц: ${ds['PriceMonth']} сом'),
+          ],
+        ),
+        trailing: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              icon: Icon(Icons.edit, color: Colors.green),
+              onPressed: () {
+                _showEditDialog(ds.id, ds);
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.delete, color: Colors.red),
+              onPressed: () {
+                _deleteGroup(ds.id);
+              },
+            ),
+          ],
+        ),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => StudentListInGroupView(groupId: ds.id),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  void _showEditDialog(String id, DocumentSnapshot ds) {
+    selectedDirectionController = ds['GroupDirection'];
+    nameGroupController.text = ds['GroupName'];
+    selectedCityController = ds['GroupCity'];
+    startDateController.text = DateFormat('dd-MM-yyyy').format((ds['StartDate'] as Timestamp).toDate());
+    endDateController.text = DateFormat('dd-MM-yyyy').format((ds['EndDate'] as Timestamp).toDate());
+    selectedTeacherController = ds['GroupTeacher'];
+    maxCountStudentController.text = ds['MaxCountStudent'].toString();
+    priceMonthController.text = ds['PriceMonth'].toString();
+
     showDialog(
       context: context,
       builder: (context) {
@@ -79,13 +144,13 @@ class _GroupControllerState extends State<GroupController> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTextFormField('Название группы', nameGroupController),
-                _buildTextFormField('Город', TextEditingController()..text = selectedCityController ?? ''),
+                _buildCityDropdown(),
                 _buildDateFormField('Дата с', startDateController),
                 _buildDateFormField('Дата до', endDateController),
-                _buildTextFormField('Учитель', TextEditingController()..text = selectedTeacherController ?? ''),
+                _buildTeacherDropdown(),
                 _buildTextFormField('Максимальное количество студентов', maxCountStudentController),
                 _buildTextFormField('Цена в месяц', priceMonthController),
-                // Добавьте другие необходимые поля
+                _buildDirectionDropdown(),
               ],
             ),
           ),
@@ -98,24 +163,18 @@ class _GroupControllerState extends State<GroupController> {
             ),
             TextButton(
               onPressed: () async {
-                Group updatedGroup = Group(
-                  id: id,
-                  name: nameGroupController.text,
-                  direction: selectedDirectionController!,
-                  city: selectedCityController!,
-                  startDate: DateFormat('dd-MM-yyyy').parse(startDateController.text),
-                  endDate: DateFormat('dd-MM-yyyy').parse(endDateController.text),
-                  teacher: selectedTeacherController!,
-                  maxCountStudent: int.parse(maxCountStudentController.text),
-                  priceMonth: double.parse(priceMonthController.text),
-                );
-                await databaseMethodsGroup.updateGroupDetail(id, updatedGroup.toMap());
+                Map<String, dynamic> groupInfoMap = {
+                  "GroupName": nameGroupController.text,
+                  "GroupDirection": selectedDirectionController,
+                  "GroupCity": selectedCityController,
+                  'StartDate': DateFormat('dd-MM-yyyy').parse(startDateController.text),
+                  "EndDate": DateFormat('dd-MM-yyyy').parse(endDateController.text),
+                  'GroupTeacher': selectedTeacherController,
+                  'MaxCountStudent': int.parse(maxCountStudentController.text),
+                  'PriceMonth': double.parse(priceMonthController.text),
+                };
+                await databaseMethodsGroup.updateGroupDetail(id, groupInfoMap);
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Группа обновлена успешно'),
-                  ),
-                );
               },
               child: Text('Сохранить'),
             )
@@ -123,6 +182,23 @@ class _GroupControllerState extends State<GroupController> {
         );
       },
     );
+  }
+
+  Future<void> _deleteGroup(String id) async {
+    try {
+      await databaseMethodsGroup.deleteGroupDetail(id);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Группа удалена успешно'),
+        ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Удаление группы не удалось: $e'),
+        ),
+      );
+    }
   }
 
   Widget _buildTextFormField(String label, TextEditingController controller) {
@@ -171,6 +247,102 @@ class _GroupControllerState extends State<GroupController> {
         ),
         SizedBox(height: 10),
       ],
+    );
+  }
+
+  Widget _buildCityDropdown() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('City').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        var cities = snapshot.data!.docs;
+
+        return DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: 'Город',
+            border: OutlineInputBorder(),
+          ),
+          value: selectedCityController,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedCityController = newValue!;
+            });
+          },
+          items: cities.map((city) {
+            return DropdownMenuItem<String>(
+              value: city.id,
+              child: Text(city['CityName']),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildDirectionDropdown() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Direction').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        var directions = snapshot.data!.docs;
+
+        return DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: 'Направление',
+            border: OutlineInputBorder(),
+          ),
+          value: selectedDirectionController,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedDirectionController = newValue!;
+            });
+          },
+          items: directions.map((direction) {
+            return DropdownMenuItem<String>(
+              value: direction.id,
+              child: Text(direction['Direction']),
+            );
+          }).toList(),
+        );
+      },
+    );
+  }
+
+  Widget _buildTeacherDropdown() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Teacher').snapshots(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        var teachers = snapshot.data!.docs;
+
+        return DropdownButtonFormField<String>(
+          decoration: InputDecoration(
+            labelText: 'Учитель',
+            border: OutlineInputBorder(),
+          ),
+          value: selectedTeacherController,
+          onChanged: (String? newValue) {
+            setState(() {
+              selectedTeacherController = newValue!;
+            });
+          },
+          items: teachers.map((teacher) {
+            return DropdownMenuItem<String>(
+              value: teacher.id,
+              child: Text(teacher['Surname']),
+            );
+          }).toList(),
+        );
+      },
     );
   }
 }
